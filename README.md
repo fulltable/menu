@@ -38,3 +38,13 @@ npm install -g webpack
 npm install
 ```
 
+CRUD API
+
+POST - /api/restaurants
+
+GET - /api/restaurants/:id/menus/:menu
+
+UPDATE - /api/restaurants/:id
+
+DELETE - /api/restaurants/:id/menus/:menu
+
