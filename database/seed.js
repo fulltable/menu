@@ -4,10 +4,12 @@ const db = require('./index.js');
 
 const sampleItems = [];
 
-
 class Item {
   constructor(restaurantId, menus, types) {
-    this.item = [faker.commerce.productMaterial(), faker.commerce.product()].join(' ');
+    this.item = [
+      faker.commerce.productMaterial(),
+      faker.commerce.product()
+    ].join(' ');
     const descriptorsCount = Math.floor(Math.random() * Math.floor(3));
     const descriptors = [];
     for (let i = 0; i <= descriptorsCount; i += 1) {
@@ -24,7 +26,10 @@ class Item {
     }
     this.description = descriptors.join(' ');
     this.menu = menus[Math.floor(Math.random() * Math.floor(menus.length))];
-    this.type = types[this.menu][Math.floor(Math.random() * Math.floor(types[this.menu].length))];
+    this.type =
+      types[this.menu][
+        Math.floor(Math.random() * Math.floor(types[this.menu].length))
+      ];
     this.price = (faker.commerce.price() / 100 + 3).toFixed(2);
     this.restaurantId = restaurantId;
   }
@@ -35,17 +40,44 @@ const populateItems = () => {
   for (let i = 1; i <= 100; i += 1) {
     const menuCount = Math.floor(Math.random() * Math.floor(5)) + 2;
     const menus = [];
-    const menuChoices = {0: 'Breakfast', 1: 'Lunch', 2: 'Dinner', 3: 'Brunch', 4: 'Weekend', 5: 'Special', 6: 'Kids', 7: 'Holiday', 8: 'Wine', 9: 'Drinks', 10: 'Beer'};
+    const menuChoices = {
+      0: 'Breakfast',
+      1: 'Lunch',
+      2: 'Dinner',
+      3: 'Brunch',
+      4: 'Weekend',
+      5: 'Special',
+      6: 'Kids',
+      7: 'Holiday',
+      8: 'Wine',
+      9: 'Drinks',
+      10: 'Beer'
+    };
     let menuTypes = {};
     for (let j = 0; j <= menuCount; j += 1) {
-      const rand = Object.keys(menuChoices)[Math.floor(Math.random() * Math.floor(Object.keys(menuChoices).length))];
+      const rand = Object.keys(menuChoices)[
+        Math.floor(Math.random() * Math.floor(Object.keys(menuChoices).length))
+      ];
       menus.push(menuChoices[rand]);
-      
+
       const typeCount = Math.floor(Math.random() * Math.floor(3)) + 1;
       const types = [];
-      const typeChoices = {0: 'Appetizers', 1: 'Snacks', 2: 'Entrees', 3: 'Tapas', 4: 'Dessert', 5: 'Sides', 6: 'Main', 7: 'Special'};
+      const typeChoices = {
+        0: 'Appetizers',
+        1: 'Snacks',
+        2: 'Entrees',
+        3: 'Tapas',
+        4: 'Dessert',
+        5: 'Sides',
+        6: 'Main',
+        7: 'Special'
+      };
       for (let j = 0; j <= typeCount; j += 1) {
-        const rand = Object.keys(typeChoices)[Math.floor(Math.random() * Math.floor(Object.keys(typeChoices).length))];
+        const rand = Object.keys(typeChoices)[
+          Math.floor(
+            Math.random() * Math.floor(Object.keys(typeChoices).length)
+          )
+        ];
         types.push(typeChoices[rand]);
         delete typeChoices[rand];
       }
@@ -53,18 +85,15 @@ const populateItems = () => {
       delete menuChoices[rand];
     }
     // Items
-    const itemCount = Math.floor(Math.random() * Math.floor(200)) + 100;
+    const itemCount = Math.floor(Math.random() * Math.floor(75)) + 35;
     for (let j = 0; j < itemCount; j += 1) {
       sampleItems.push(new Item(i, menus, menuTypes));
     }
   }
-}
-
-populateItems();
+};
 
 const insertSampleItems = () => {
-  MenuItem.model.create(sampleItems)
-    .then(() => db.close());
+  MenuItem.model.create(sampleItems).then(() => db.close());
 };
 
 insertSampleItems();
