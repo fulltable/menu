@@ -118,36 +118,4 @@ const populateItems = () => {
   }
 };
 
-const write10Milli = (writer, encoding, callback) => {
-  let i = 10000001;
-  write();
-  function write() {
-    let ok = true;
-    do {
-      // let data = populateItems();
-      // data.restaurantId = i;
-      // data = JSON.stringify(data);
-      i--;
-      if (i === 1) {
-        for (let j = 1; j <= 3; j++) {
-          let data = populateItems();
-          data.restaurantId = i;
-          data = JSON.stringify(data);
-          writer.write(`${data}\n`, encoding, callback);
-        }
-      } else {
-        for (let k = 1; k <= 3; k++) {
-          let data = populateItems();
-          data.restaurantId = i;
-          data = JSON.stringify(data);
-          ok = writer.write(`${data}\n`, encoding);
-        }
-      }
-    } while (i > 1 && ok);
-    if (i > 1) {
-      writer.once('drain', write);
-    }
-  }
-};
-
 write10Milli(writer, 'utf8', console.log('complete'));
