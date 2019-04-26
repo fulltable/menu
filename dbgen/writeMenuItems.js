@@ -49,7 +49,7 @@ const rowData = i => {
 };
 
 const writerID = fs.createWriteStream(__dirname + '/restaurantID.csv', 'utf8');
-const writerMenu = fs.createWriteStream(__dirname + '/menuitems.csv', 'utf8');
+const writerMenu = fs.createWriteStream(__dirname + '/menuitems2.csv', 'utf8');
 const write10Milli = (writer, encoding, callback) => {
   let i = 10000001;
   write();
