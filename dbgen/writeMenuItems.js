@@ -26,84 +26,47 @@ const rowData = i => {
     6: 'Main',
     7: 'Special'
   };
-
-  const randomMenu = Object.keys(menuChoices)[
-    Math.floor(Math.random() * Math.floor(Object.keys(menuChoices).length))
-  ];
-
-  const randomType = Object.keys(typeChoices)[
-    Math.floor(Math.random() * Math.floor(Object.keys(typeChoices).length))
-  ];
   let restaurantID = i;
   const item = [
     faker.commerce.productMaterial(),
     faker.commerce.product()
   ].join(' ');
   const description = faker.lorem.sentence();
-  const menu = menuChoices[randomMenu];
-  const type = typeChoices[randomType];
+  const menu = menuChoices[faker.random.number({ min: 0, max: 10 })];
+  const type = typeChoices[faker.random.number({ min: 0, max: 7 })];
   const price = (faker.commerce.price() / 100 + 3).toFixed(2);
-  const result = `${restaurantID},${itemID},${item},${description},${menu},${type},${price}`;
+  const result = `${itemID},${restaurantID},${item},${description},${menu},${type},${price}`;
   return result;
-  // , description, menu, type, price;
 };
 
-const writerID = fs.createWriteStream(__dirname + '/restaurantID.csv', 'utf8');
-const writerMenu = fs.createWriteStream(__dirname + '/menuitems2.csv', 'utf8');
+const writerMenu = fs.createWriteStream(__dirname + '/menuitems.csv', 'utf8');
 const write10Milli = (writer, encoding, callback) => {
-  let i = 10000001;
+  let i = 0;
   write();
   function write() {
     let ok = true;
     do {
-      i--;
-      if (i === 1) {
-        for (let j = 1; j <= 3; j++) {
+      i++;
+      if (i === 10000000) {
+        for (let j = 1; j <= 5; j++) {
           let data = rowData(i);
-          // data.restaurantId = i;
-          // data = JSON.stringify(data);
           writer.write(`${data}\n`, encoding, callback);
         }
       } else {
-        for (let k = 1; k <= 3; k++) {
+        for (let k = 1; k <= 5; k++) {
           let data = rowData(i);
-          // data.restaurantId = i;
-          // data = JSON.stringify(data);
           ok = writer.write(`${data}\n`, encoding);
         }
       }
-    } while (i > 1 && ok);
+    } while (i < 10000000 && ok);
     if (i > 1) {
       writer.once('drain', write);
     }
   }
 };
-
-const write10MID = (writer, encoding, callback) => {
-  let i = 10000001;
-  write();
-  function write() {
-    let ok = true;
-    do {
-      i--;
-      if (i === 1) {
-        let data = i;
-        writer.write(`${data}\n`, encoding, callback);
-      } else {
-        let data = i;
-        ok = writer.write(`${data}\n`, encoding);
-      }
-    } while (i > 1 && ok);
-    if (i > 1) {
-      writer.once('drain', write);
-    }
-  }
-};
-
-// write10MID(writerID, 'utf8', () => {
-//   console.log('Done!');
-// });
 
 write10Milli(writerMenu, 'utf8', () => {
   console.log('Done!');
 });
+
+// scp -i your-ec2-key.pem -r /Users/Desktop/SDC/menu/dbgen/menuitems.csv ec2-user@your-ec2-address:
